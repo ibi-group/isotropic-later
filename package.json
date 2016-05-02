@@ -9,6 +9,7 @@
         ],
         "sourceMaps": "inline"
     },
+    "bugs": "https://github.com/ibi-group/isotropic-later/issues",
     "contributors": [
         "Duane Sibilly <duane.sibilly@ibigroup.com>"
     ],
@@ -44,9 +45,11 @@
         },
         "root": true
     },
+    "homepage": "https://github.com/ibi-group/isotropic-later",
     "license": "BSD-3-Clause",
     "main": "lib/later.js",
     "name": "isotropic-later",
+    "repository": "ibi-group/isotropic-later",
     "scripts": {
         "build": "babel js -d lib",
         "lint": "eslint js test",
