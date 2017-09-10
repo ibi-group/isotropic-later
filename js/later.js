@@ -1,28 +1,43 @@
-import {
-    clearTimeout,
-    setTimeout
-} from 'timers';
+import _asap from 'asap/raw.js';
+import _timers from 'timers';
 
-import asap from 'isotropic-asap';
-
-export default (milliseconds, callbackFunction) => {
-    if (milliseconds <= 0) {
-        return asap(callbackFunction);
-    }
-
+const _later = (milliseconds, callbackFunction) => {
     let cancelled = false,
+        clearTimer,
         completed = false;
 
-    const timer = setTimeout(() => {
-        completed = true;
-        callbackFunction();
-    }, milliseconds);
+    const timerFunction = () => {
+        if (!cancelled) {
+            completed = true;
+            callbackFunction();
+        }
+    };
+
+    if (milliseconds < 0) {
+        _asap(timerFunction);
+    } else if (milliseconds === 0) {
+        const timer = _timers.setImmediate(timerFunction);
+
+        clearTimer = () => {
+            _timers.clearImmediate(timer);
+        };
+    } else {
+        const timer = _timers.setTimeout(timerFunction, milliseconds);
+
+        clearTimer = () => {
+            _timers.clearTimeout(timer);
+        };
+    }
 
     return {
         cancel () {
             if (!cancelled) {
                 cancelled = true;
-                clearTimeout(timer);
+
+                if (clearTimer) {
+                    clearTimer();
+                    clearTimer = void null;
+                }
             }
 
             return this;
@@ -35,3 +50,8 @@ export default (milliseconds, callbackFunction) => {
         }
     };
 };
+
+_later.asap = callbackFunction => _later(-1, callbackFunction);
+_later.soon = callbackFunction => _later(0, callbackFunction);
+
+export default _later;

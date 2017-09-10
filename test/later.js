@@ -1,52 +1,42 @@
-import {
-    describe,
-    it
-} from 'mocha';
+import _chai from 'chai';
+import _later from '../js/later.js';
+import _mocha from 'mocha';
+import _timers from 'timers';
 
-import {
-    expect
-} from 'chai';
-
-import later from '../js/later.js';
-
-import {
-    setTimeout
-} from 'timers';
-
-describe('later', function () {
+_mocha.describe('later', function () {
     this.timeout(144);
 
-    it('should be a function', () => {
-        expect(later).to.be.a('function');
+    _mocha.it('should be a function', () => {
+        _chai.expect(_later).to.be.a('function');
     });
 
-    it('should execute a task after a specified amount of time', callbackFunction => {
+    _mocha.it('should execute a task after a specified amount of time', callbackFunction => {
         let before = true,
             complete = false,
             first = false;
 
-        const handle = later(55, () => {
+        const handle = _later(55, () => {
             complete = true;
 
-            expect(before).to.be.false;
-            expect(first).to.be.true;
-            expect(handle).to.have.property('completed', true);
+            _chai.expect(before).to.be.false;
+            _chai.expect(first).to.be.true;
+            _chai.expect(handle).to.have.property('completed', true);
         });
 
-        expect(handle).to.be.an('object');
-        expect(handle).to.have.property('completed', false);
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('completed', false);
 
-        setTimeout(() => {
+        _timers.setTimeout(() => {
             first = true;
 
-            expect(before).to.be.false;
-            expect(complete).to.be.false;
+            _chai.expect(before).to.be.false;
+            _chai.expect(complete).to.be.false;
         }, 34);
 
-        setTimeout(() => {
-            expect(before).to.be.false;
-            expect(complete).to.be.true;
-            expect(first).to.be.true;
+        _timers.setTimeout(() => {
+            _chai.expect(before).to.be.false;
+            _chai.expect(complete).to.be.true;
+            _chai.expect(first).to.be.true;
 
             callbackFunction();
         }, 89);
@@ -54,62 +44,161 @@ describe('later', function () {
         before = false;
     });
 
-    it('should allow tasks to be cancelled before execution', callbackFunction => {
+    _mocha.it('should allow tasks to be cancelled before execution', callbackFunction => {
         let called = false;
 
-        const handle = later(55, () => {
+        const handle = _later(55, () => {
             called = true;
         });
 
-        expect(handle).to.be.an('object');
-        expect(handle).to.have.property('cancel').that.is.a('function');
-        expect(handle).to.have.property('cancelled', false);
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('cancel').that.is.a('function');
+        _chai.expect(handle).to.have.property('cancelled', false);
 
-        setTimeout(() => {
+        _timers.setTimeout(() => {
             handle.cancel();
-            expect(handle).to.have.property('cancelled', true);
+            _chai.expect(handle).to.have.property('cancelled', true);
         }, 34);
 
-        setTimeout(() => {
-            expect(called).to.be.false;
+        _timers.setTimeout(() => {
+            _chai.expect(called).to.be.false;
             callbackFunction();
         }, 89);
     });
 
-    it('should allow cancel to be called multiple times with no effect', callbackFunction => {
+    _mocha.it('should allow cancel to be called multiple times with no effect', callbackFunction => {
         let called = false;
 
-        const handle = later(55, () => {
+        const handle = _later(55, () => {
             called = true;
         });
 
-        expect(handle).to.be.an('object');
-        expect(handle).to.have.property('cancel').that.is.a('function');
-        expect(handle).to.have.property('cancelled', false);
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('cancel').that.is.a('function');
+        _chai.expect(handle).to.have.property('cancelled', false);
 
-        setTimeout(() => {
+        _timers.setTimeout(() => {
             handle.cancel().cancel().cancel();
-            expect(handle).to.have.property('cancelled', true);
+            _chai.expect(handle).to.have.property('cancelled', true);
         }, 34);
 
-        setTimeout(() => {
-            expect(called).to.be.false;
+        _timers.setTimeout(() => {
+            _chai.expect(called).to.be.false;
             callbackFunction();
         }, 89);
     });
 
-    it('should should allow a time value of 0', callbackFunction => {
+    _mocha.it('should allow a milliseconds value of 0', callbackFunction => {
         let before = true;
 
-        const handle = later(0, () => {
-            expect(before).to.be.false;
-            expect(handle).to.have.property('completed', true);
+        const handle = _later(0, () => {
+            _chai.expect(before).to.be.false;
+            _chai.expect(handle).to.have.property('completed', true);
             callbackFunction();
         });
 
-        expect(handle).to.be.an('object');
-        expect(handle).to.have.property('completed', false);
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('completed', false);
 
         before = false;
+    });
+
+    _mocha.it('should allow a milliseconds value less than 0', callbackFunction => {
+        let before = true;
+
+        const handle = _later(-123, () => {
+            _chai.expect(before).to.be.false;
+            _chai.expect(handle).to.have.property('completed', true);
+            callbackFunction();
+        });
+
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('completed', false);
+
+        before = false;
+    });
+});
+
+_mocha.describe('#asap', function () {
+    this.timeout(144);
+
+    _mocha.it('should be a function', () => {
+        _chai.expect(_later).to.have.property('asap').that.is.a('function');
+    });
+
+    _mocha.it('should execute a task as soon as possible but not before it returns', callbackFunction => {
+        let before = true;
+
+        const handle = _later.asap(() => {
+            _chai.expect(before).to.be.false;
+            _chai.expect(handle).to.have.property('completed', true);
+            callbackFunction();
+        });
+
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('completed', false);
+
+        before = false;
+    });
+
+    _mocha.it('should allow tasks to be cancelled before execution', callbackFunction => {
+        let called = false;
+
+        const handle = _later.asap(() => {
+            called = true;
+        });
+
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('cancel').that.is.a('function');
+        _chai.expect(handle).to.have.property('cancelled', false);
+        handle.cancel();
+        _chai.expect(handle).to.have.property('cancelled', true);
+
+        _timers.setTimeout(() => {
+            _chai.expect(called).to.be.false;
+            callbackFunction();
+        }, 8);
+    });
+});
+
+_mocha.describe('#soon', function () {
+    this.timeout(144);
+
+    _mocha.it('should be a function', () => {
+        _chai.expect(_later).to.have.property('asap').that.is.a('function');
+    });
+
+    _mocha.it('should execute a task soon but not before it returns', callbackFunction => {
+        let before = true;
+
+        const handle = _later.soon(() => {
+            _chai.expect(before).to.be.false;
+            _chai.expect(handle).to.have.property('completed', true);
+            callbackFunction();
+        });
+
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('completed', false);
+
+        before = false;
+    });
+
+    _mocha.it('should allow tasks to be cancelled before execution', callbackFunction => {
+        let called = false;
+
+        const handle = _later.soon(() => {
+            called = true;
+        });
+
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('cancel').that.is.a('function');
+        _chai.expect(handle).to.have.property('cancelled', false);
+        handle.cancel();
+        _chai.expect(handle).to.have.property('cancelled', true);
+
+        _timers.setTimeout(() => {
+            _chai.expect(called).to.be.false;
+            callbackFunction();
+        }, 8);
     });
 });
