@@ -117,6 +117,42 @@ _mocha.describe('later', function () {
 
         before = false;
     });
+
+    _mocha.it('should return a promise when there isn\'t a callback function', callbackFunction => {
+        let before = true,
+            complete = false,
+            first = false;
+
+        const handle = _later(55);
+
+        _chai.expect(handle).to.be.a('promise');
+        _chai.expect(handle).to.have.property('completed', false);
+
+        handle.then(() => {
+            complete = true;
+
+            _chai.expect(before).to.be.false;
+            _chai.expect(first).to.be.true;
+            _chai.expect(handle).to.have.property('completed', true);
+        });
+
+        _timers.setTimeout(() => {
+            first = true;
+
+            _chai.expect(before).to.be.false;
+            _chai.expect(complete).to.be.false;
+        }, 34);
+
+        _timers.setTimeout(() => {
+            _chai.expect(before).to.be.false;
+            _chai.expect(complete).to.be.true;
+            _chai.expect(first).to.be.true;
+
+            callbackFunction();
+        }, 89);
+
+        before = false;
+    });
 });
 
 _mocha.describe('#asap', function () {

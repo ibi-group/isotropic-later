@@ -29,26 +29,45 @@ const _later = (milliseconds, callbackFunction) => {
         };
     }
 
-    return {
-        cancel () {
-            if (!cancelled) {
-                cancelled = true;
+    return Object.defineProperties(
+        typeof callbackFunction === 'function' ?
+            {} :
+            new Promise(resolve => {
+                callbackFunction = resolve;
+            }),
+        {
+            cancel: {
+                configurable: true,
+                enumerable: true,
+                value () {
+                    if (!cancelled) {
+                        cancelled = true;
 
-                if (clearTimer) {
-                    clearTimer();
-                    clearTimer = void null;
+                        if (clearTimer) {
+                            clearTimer();
+                            clearTimer = void null;
+                        }
+                    }
+
+                    return this;
+                }
+            },
+            cancelled: {
+                configurable: true,
+                enumerable: true,
+                get () {
+                    return cancelled;
+                }
+            },
+            completed: {
+                configurable: true,
+                enumerable: true,
+                get () {
+                    return completed;
                 }
             }
-
-            return this;
-        },
-        get cancelled () {
-            return cancelled;
-        },
-        get completed () {
-            return completed;
         }
-    };
+    );
 };
 
 _later.asap = callbackFunction => _later(-1, callbackFunction);
