@@ -1,6 +1,6 @@
-import _chai from 'chai';
+import _chai from 'isotropic-dev-dependencies/lib/chai.js';
 import _later from '../js/later.js';
-import _mocha from 'mocha';
+import _mocha from 'isotropic-dev-dependencies/lib/mocha.js';
 import _timers from 'timers';
 
 _mocha.describe('later', function () {
