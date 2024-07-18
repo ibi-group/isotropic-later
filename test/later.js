@@ -1,7 +1,7 @@
 import _chai from 'isotropic-dev-dependencies/lib/chai.js';
 import _later from '../js/later.js';
 import _mocha from 'isotropic-dev-dependencies/lib/mocha.js';
-import _timers from 'timers';
+import _timers from 'node:timers';
 
 _mocha.describe('later', function () {
     this.timeout(144);

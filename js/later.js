@@ -1,5 +1,5 @@
 import _asap from 'asap/raw.js';
-import _timers from 'timers';
+import _timers from 'node:timers';
 
 const _later = (milliseconds, callbackFunction) => {
     let cancelled = false,
