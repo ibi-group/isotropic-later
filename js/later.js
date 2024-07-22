@@ -4,7 +4,8 @@ import _timers from 'node:timers';
 const _later = (milliseconds, callbackFunction) => {
     let cancelled = false,
         clearTimer,
-        completed = false;
+        completed = false,
+        timer;
 
     const timerFunction = () => {
         if (!cancelled) {
@@ -16,17 +17,11 @@ const _later = (milliseconds, callbackFunction) => {
     if (milliseconds < 0) {
         _asap(timerFunction);
     } else if (milliseconds === 0) {
-        const timer = _timers.setImmediate(timerFunction);
-
-        clearTimer = () => {
-            _timers.clearImmediate(timer);
-        };
+        clearTimer = _timers.clearImmediate;
+        timer = _timers.setImmediate(timerFunction);
     } else {
-        const timer = _timers.setTimeout(timerFunction, milliseconds);
-
-        clearTimer = () => {
-            _timers.clearTimeout(timer);
-        };
+        clearTimer = _timers.clearTimeout;
+        timer = _timers.setTimeout(timerFunction, milliseconds);
     }
 
     return Object.defineProperties(
@@ -43,9 +38,10 @@ const _later = (milliseconds, callbackFunction) => {
                     if (!cancelled) {
                         cancelled = true;
 
-                        if (clearTimer) {
-                            clearTimer();
+                        if (clearTimer && timer) {
+                            clearTimer(timer);
                             clearTimer = void null;
+                            timer = void null;
                         }
                     }
 
@@ -64,6 +60,41 @@ const _later = (milliseconds, callbackFunction) => {
                 enumerable: true,
                 get () {
                     return completed;
+                }
+            },
+            hasRef: {
+                configurable: true,
+                enumerable: true,
+                value () {
+                    if (cancelled || completed) {
+                        return false;
+                    }
+
+                    return timer ?
+                        timer.hasRef() :
+                        true;
+                }
+            },
+            ref: {
+                configurable: true,
+                enumerable: true,
+                value () {
+                    if (timer) {
+                        timer.ref();
+                    }
+
+                    return this;
+                }
+            },
+            unref: {
+                configurable: true,
+                enumerable: true,
+                value () {
+                    if (timer) {
+                        timer.unref();
+                    }
+
+                    return this;
                 }
             }
         }

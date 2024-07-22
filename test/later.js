@@ -88,6 +88,38 @@ _mocha.describe('later', function () {
         }, 89);
     });
 
+    _mocha.it('should respond to hasRef, ref, and unref', () => {
+        const handle = _later(55, () => {
+            // empty function
+        });
+
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('hasRef').that.is.a('function');
+        _chai.expect(handle).to.have.property('ref').that.is.a('function');
+        _chai.expect(handle).to.have.property('unref').that.is.a('function');
+        _chai.expect(handle.hasRef()).to.be.true;
+        handle.unref();
+        _chai.expect(handle.hasRef()).to.be.false;
+        handle.ref();
+        _chai.expect(handle.hasRef()).to.be.true;
+    });
+
+    _mocha.it('should respond false to hasRef after cancelled', () => {
+        const handle = _later(55, () => {
+            // empty function
+        });
+
+        handle.cancel();
+        _chai.expect(handle.hasRef()).to.be.false;
+    });
+
+    _mocha.it('should respond false to hasRef after completed', callbackFunction => {
+        const handle = _later(55, () => {
+            _chai.expect(handle.hasRef()).to.be.false;
+            callbackFunction();
+        });
+    });
+
     _mocha.it('should allow a milliseconds value of 0', callbackFunction => {
         let before = true;
 
@@ -194,6 +226,16 @@ _mocha.describe('#asap', function () {
             _chai.expect(called).to.be.false;
             callbackFunction();
         }, 8);
+    });
+
+    _mocha.it('should respond true to hasRef', () => {
+        const handle = _later.asap(() => {
+            // empty function
+        });
+
+        _chai.expect(handle).to.be.an('object');
+        _chai.expect(handle).to.have.property('hasRef').that.is.a('function');
+        _chai.expect(handle.hasRef()).to.be.true;
     });
 });
 
