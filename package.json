@@ -6,6 +6,7 @@
     },
     "description": "A function that executes a task some amount of time in the future",
     "devDependencies": {
+        "eslint": "~9.8.0",
         "isotropic-dev-dependencies": "~0.3.0"
     },
     "engines": {
