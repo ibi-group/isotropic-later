@@ -6,7 +6,8 @@
     },
     "description": "A function that executes a task some amount of time in the future",
     "devDependencies": {
-        "isotropic-dev-dependencies": "~0.3.0"
+        "eslint": "~9.8.0",
+        "isotropic-dev-dependencies": "~0.3.1"
     },
     "engines": {
         "node": "^22.5.1",
@@ -34,5 +35,5 @@
         "test": "cross-env BABEL_ENV=test c8 -c ./node_modules/isotropic-dev-dependencies/config/c8.json mocha --import=isotropic-dev-dependencies/lib/register-babel-loader.js"
     },
     "type": "module",
-    "version": "0.13.0"
+    "version": "0.13.1"
 }
