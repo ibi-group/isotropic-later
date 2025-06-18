@@ -1,4 +1,3 @@
-import _asap from 'asap/raw.js';
 import _timers from 'node:timers';
 
 const _later = (milliseconds, callbackFunction) => {
@@ -15,7 +14,7 @@ const _later = (milliseconds, callbackFunction) => {
     };
 
     if (milliseconds < 0) {
-        _asap(timerFunction);
+        queueMicrotask(timerFunction);
     } else if (milliseconds === 0) {
         clearTimer = _timers.clearImmediate;
         timer = _timers.setImmediate(timerFunction);

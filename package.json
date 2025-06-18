@@ -1,9 +1,6 @@
 {
     "author": "Steven Olmsted <steven.olmsted@ibigroup.com>",
     "bugs": "https://github.com/ibi-group/isotropic-later/issues",
-    "dependencies": {
-        "asap": "~2.0.6"
-    },
     "description": "A function that executes a task some amount of time in the future",
     "devDependencies": {
         "eslint": "~9.8.0",
