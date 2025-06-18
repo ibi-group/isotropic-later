@@ -72,7 +72,7 @@ Schedules a task to execute after the specified delay.
 - `milliseconds` (Number): Delay in milliseconds before execution
   - If `> 0`: Uses `setTimeout` with the specified delay
   - If `= 0`: Uses `setImmediate` for faster execution
-  - If `< 0`: Uses the ASAP algorithm for the quickest possible async execution
+  - If `< 0`: Uses queueMicrotask for the quickest possible async execution
 - `callback` (Function, optional): Function to execute after the delay
   - If omitted, returns a Promise that resolves after the delay
 
