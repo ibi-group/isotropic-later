@@ -2,12 +2,12 @@
     "author": "Steven Olmsted <steven.olmsted@ibigroup.com>",
     "bugs": "https://github.com/ibi-group/isotropic-later/issues",
     "dependencies": {
-        "isotropic-cancel": "~0.0.0",
-        "isotropic-error": "~0.13.1"
+        "isotropic-cancel": "~0.1.0",
+        "isotropic-error": "~0.14.0"
     },
     "description": "A function that executes a task some amount of time in the future",
     "devDependencies": {
-        "isotropic-dev-dependencies": "~0.3.1"
+        "isotropic-dev-dependencies": "~0.4.0"
     },
     "engines": {
         "node": "^26.5.0",
@@ -41,5 +41,5 @@
         "test": "c8 -c ./node_modules/isotropic-dev-dependencies/config/c8.json node --test"
     },
     "type": "module",
-    "version": "0.14.0"
+    "version": "0.15.0"
 }
