@@ -31,7 +31,10 @@
     "license": "BSD-3-Clause",
     "main": "lib/later.js",
     "name": "isotropic-later",
-    "repository": "github:ibi-group/isotropic-later",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ibi-group/isotropic-later.git"
+    },
     "scripts": {
         "lint": "eslint eslint.config.js lib test",
         "posttest": "c8 -c ./node_modules/isotropic-dev-dependencies/config/c8.json check-coverage",
