@@ -1,4 +1,13 @@
-# Changelog
+# isotropic-later Changelog
+
+## 0.15.1 - 2026-08-23
+
+### Changed
+
+- Recommends `node ^26.7.0` / `npm ^11.19.0`.
+- `repository` now uses npm's preferred object form with explicit `type` and `url` properties rather than the `github:` shorthand. This is package metadata only.
+
+No runtime behavior changed in this release.
 
 ## 0.15.0 - 2026-07-15
 
